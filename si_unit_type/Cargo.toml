@@ -3,6 +3,7 @@ name = "si_unit_type"
 version = "0.1.0"
 edition = "2024"
 repository = "https://github.com/Slacker201/slackers_si_units"
+description = "The types for slackers_si_units"
 licence = ["MIT"]
 
 [dependencies]
