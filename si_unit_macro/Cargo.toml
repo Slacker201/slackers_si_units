@@ -7,6 +7,8 @@ edition = "2024"
 proc-macro2 = "1.0.107"
 quote = "1.0.47"
 syn = "3.0.9"
+si_unit_parser = { path = "./../si_unit_parser" }
+si_unit_type = { path = "./../si_unit_type" }
 
 
 [lib]
