@@ -110,7 +110,7 @@ dependencies = [
 
 [[package]]
 name = "si_unit_macro"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -121,7 +121,7 @@ dependencies = [
 
 [[package]]
 name = "si_unit_parser"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "fixed",
  "slk-tokenstream",
@@ -129,7 +129,7 @@ dependencies = [
 
 [[package]]
 name = "si_unit_type"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "fastnum",
  "fixed",
@@ -138,7 +138,7 @@ dependencies = [
 
 [[package]]
 name = "slackers_si_units"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "si_unit_macro",
  "si_unit_parser",
