@@ -1,6 +1,6 @@
 use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
-use si_unit_parser::UnitFixedPointDecimal;
+use si_unit_parser::FixedPointDecimal;
 use syn::{Ident, LitFloat, LitInt, parse::Parse};
 
 pub(crate) fn unit_impl(ts: TokenStream) -> TokenStream {
@@ -42,7 +42,7 @@ pub(crate) fn unit_impl(ts: TokenStream) -> TokenStream {
 
 #[derive(Debug)]
 pub struct Dec {
-    dec: UnitFixedPointDecimal,
+    dec: FixedPointDecimal,
 }
 
 impl Parse for Dec {
@@ -60,8 +60,7 @@ impl Parse for Dec {
             ));
         };
 
-        let dec = UnitFixedPointDecimal::parse_require_unit(s)
-            .ok_or(syn::Error::new(ispan, "expected unit"))?;
+        let dec = FixedPointDecimal::parse(s).ok_or(syn::Error::new(ispan, "expected unit"))?;
         Ok(Self { dec })
     }
 }

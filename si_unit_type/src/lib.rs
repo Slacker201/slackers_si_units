@@ -6,7 +6,15 @@ use std::{
 use si_unit_parser::Digit;
 
 pub trait Backer:
-    Add<Output = Self> + AddAssign + Sub<Output = Self> + SubAssign + Div<Output = Self> + DivAssign + Mul<Output = Self> + MulAssign + Clone
+    Add<Output = Self>
+    + AddAssign
+    + Sub<Output = Self>
+    + SubAssign
+    + Div<Output = Self>
+    + DivAssign
+    + Mul<Output = Self>
+    + MulAssign
+    + Clone
 {
     fn from_fixed_decimal(integer: &[Digit], decimal: &[Digit]) -> Self;
 }
@@ -15,7 +23,7 @@ mod backers;
 
 macro_rules! create_unit {
     ($name: ident, $name_but_str: literal) => {
-        #[derive(Clone, PartialEq, PartialOrd)]
+        #[derive(Clone)]
         pub struct $name<B: Backer> {
             backer: B,
         }
@@ -39,7 +47,7 @@ macro_rules! create_unit {
 
             fn add(self, rhs: $name<B>) -> Self::Output {
                 Self {
-                    backer: self.backer + rhs.backer
+                    backer: self.backer + rhs.backer,
                 }
             }
         }
@@ -49,7 +57,7 @@ macro_rules! create_unit {
 
             fn sub(self, rhs: $name<B>) -> Self::Output {
                 Self {
-                    backer: self.backer - rhs.backer
+                    backer: self.backer - rhs.backer,
                 }
             }
         }
@@ -59,7 +67,7 @@ macro_rules! create_unit {
 
             fn mul(self, rhs: Unit<B>) -> Self::Output {
                 Self {
-                    backer: self.backer * rhs.backer
+                    backer: self.backer * rhs.backer,
                 }
             }
         }
@@ -69,7 +77,7 @@ macro_rules! create_unit {
 
             fn div(self, rhs: Unit<B>) -> Self::Output {
                 Self {
-                    backer: self.backer / rhs.backer
+                    backer: self.backer / rhs.backer,
                 }
             }
         }
@@ -96,7 +104,20 @@ macro_rules! create_unit {
         }
 
         impl<B: Backer + Copy + Clone> Copy for $name<B> {}
-        impl<B: Backer + PartialEq + Eq> Eq for $name<B> {}
+        impl<B: Backer + PartialEq + PartialOrd + Eq> Eq for $name<B> {}
+
+        impl<B: Backer + PartialOrd> PartialEq for $name<B> {
+            fn eq(&self, rhs: &Self) -> bool {
+                self.backer.eq(&rhs.backer)
+            }
+        }
+
+        impl<B: Backer + PartialOrd> PartialOrd for $name<B> {
+            fn partial_cmp(&self, rhs: &Self) -> Option<std::cmp::Ordering> {
+                self.backer.partial_cmp(&rhs.backer)
+            }
+        }
+
         impl<B: Backer + PartialOrd + Ord> Ord for $name<B> {
             fn cmp(&self, rhs: &Self) -> std::cmp::Ordering {
                 self.backer.cmp(&rhs.backer)
