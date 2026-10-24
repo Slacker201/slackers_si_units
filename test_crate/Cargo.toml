@@ -4,4 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-slackers_si_units = { path = "./.." }
+fixed = "1.31.0"
+slackers_si_units = { path = "./..", features=["fixed"] }
