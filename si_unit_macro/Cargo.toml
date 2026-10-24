@@ -2,6 +2,8 @@
 name = "si_unit_macro"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/Slacker201/slackers_si_units"
+licence = ["MIT"]
 
 [dependencies]
 proc-macro2 = "1.0.107"

@@ -2,6 +2,8 @@
 name = "si_unit_parser"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/Slacker201/slackers_si_units"
+licence = ["MIT"]
 
 [dependencies]
 fixed = "1.31.0"
