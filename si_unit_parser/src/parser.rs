@@ -34,7 +34,7 @@ pub enum Digit {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-enum UnitType {
+pub enum UnitType {
     Gram,
     Liter,
     Second,
@@ -192,9 +192,24 @@ impl FixedPointDecimal {
         let (front, back) = self.integer.as_slices();
         NumberSlice { front, back }
     }
+
+    pub fn unit_type(&self) -> Option<UnitType> {
+        self.unit
+    }
 }
 
 impl UnitFixedPointDecimal {
+
+    pub fn decimal<'a>(&'a self) -> NumberSlice<'a> {
+        let (front, back) = self.decimal.as_slices();
+        NumberSlice { front, back }
+    }
+
+    pub fn integer<'a>(&'a self) -> NumberSlice<'a> {
+        let (front, back) = self.integer.as_slices();
+        NumberSlice { front, back }
+    }
+
     fn apply_unit_prefix(&mut self, unit_prefix: UnitPrefix) {
         let amount_to_move = unit_prefix.move_amount();
 
@@ -251,6 +266,14 @@ impl UnitFixedPointDecimal {
         unscaled.apply_unit_prefix(unit.prefix);
         Some(unscaled)
     }
+
+    pub fn unit_type(&self) -> UnitType {
+        self.unit
+    }
+
+    pub const fn new(integer: VecDeque<Digit>, decimal: VecDeque<Digit>, unit: UnitType) -> Self {
+        Self { integer, decimal, unit }
+    }
 }
 
 impl Digit {
@@ -284,6 +307,15 @@ impl UnitType {
         };
         ts.advance(1);
         Some(v)
+    }
+
+    pub fn to_type_string(&self) -> &str {
+        match self {
+            UnitType::Gram => "Gram",
+            UnitType::Liter => "Liter",
+            UnitType::Second => "Second",
+            UnitType::Meter => "Meter",
+        }
     }
 }
 
