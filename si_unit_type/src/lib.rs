@@ -11,6 +11,8 @@ pub trait Backer:
     fn from_fixed_decimal(integer: &[Digit], decimal: &[Digit]) -> Self;
 }
 
+mod backers;
+
 macro_rules! create_unit {
     ($name: ident, $name_but_str: literal) => {
         pub struct $name<B: Backer> {
@@ -37,18 +39,3 @@ create_unit!(Gram, "Gram");
 create_unit!(Meter, "Meter");
 create_unit!(Second, "Second");
 create_unit!(Liter, "Liter");
-
-impl Backer for f64 {
-    fn from_fixed_decimal(integer: &[Digit], decimal: &[Digit]) -> Self {
-        let mut s = String::new();
-        for int in integer {
-            s.push(int.to_char());
-        }
-        s.push('.');
-        for int in decimal {
-            s.push(int.to_char());
-        }
-
-        s.parse().unwrap()
-    }
-}
