@@ -176,8 +176,8 @@ impl FixedPointDecimal {
     }
 
     fn trim_zeros(&mut self) {
-        while let Some(_) = self.integer.pop_front_if(|c| *c == Digit::Zero) {}
-        while let Some(_) = self.decimal.pop_back_if(|c| *c == Digit::Zero) {}
+        while self.integer.pop_front_if(|c| *c == Digit::Zero).is_some() {}
+        while self.decimal.pop_back_if(|c| *c == Digit::Zero).is_some() {}
 
         if self.integer.is_empty() {
             self.integer.push_front(Digit::Zero);
@@ -240,8 +240,8 @@ impl UnitFixedPointDecimal {
     }
 
     fn trim_zeros(&mut self) {
-        while let Some(_) = self.integer.pop_front_if(|c| *c == Digit::Zero) {}
-        while let Some(_) = self.decimal.pop_back_if(|c| *c == Digit::Zero) {}
+        while self.integer.pop_front_if(|c| *c == Digit::Zero).is_some() {}
+        while self.decimal.pop_back_if(|c| *c == Digit::Zero).is_some() {}
 
         if self.integer.is_empty() {
             self.integer.push_front(Digit::Zero);
@@ -331,7 +331,7 @@ impl UnitType {
         Some(v)
     }
 
-    pub fn to_type_string(&self) -> &str {
+    pub fn to_type_string(self) -> &'static str {
         match self {
             UnitType::Gram => "Gram",
             UnitType::Liter => "Liter",

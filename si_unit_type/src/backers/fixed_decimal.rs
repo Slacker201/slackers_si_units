@@ -1,12 +1,17 @@
-use fixed::{FixedI128, types::extra::{U8, U16, U32, U64, U96}};
+use fixed::{
+    FixedI128,
+    types::extra::{U8, U16, U32, U64, U96},
+};
 
 use crate::Backer;
-
 
 macro_rules! implement_fixed {
     ($t: ident) => {
         impl Backer for FixedI128<$t> {
-            fn from_fixed_decimal(integer: &[si_unit_parser::Digit], decimal: &[si_unit_parser::Digit]) -> Self {
+            fn from_fixed_decimal(
+                integer: &[si_unit_parser::Digit],
+                decimal: &[si_unit_parser::Digit],
+            ) -> Self {
                 let mut s = String::new();
                 for digit in integer {
                     s.push(digit.to_char());

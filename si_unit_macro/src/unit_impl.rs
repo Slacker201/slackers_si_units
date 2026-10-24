@@ -38,7 +38,6 @@ pub(crate) fn unit_impl(ts: TokenStream) -> TokenStream {
             )
         )
     }
-    .into()
 }
 
 #[derive(Debug)]
