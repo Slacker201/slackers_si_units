@@ -40,6 +40,16 @@ macro_rules! create_unit {
             pub const fn new(backer: B) -> Self {
                 Self { backer }
             }
+
+            pub fn backer_ref(&self) -> &B {
+                &self.backer
+            }
+        }
+
+        impl<B: Backer + Copy> $name<B> {
+            pub fn backer(&self) -> B {
+                self.backer
+            }
         }
 
         impl<B: Backer> Add<$name<B>> for $name<B> {
