@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 repository = "https://github.com/Slacker201/slackers_si_units"
 description = "The types for slackers_si_units"
-licence = ["MIT"]
+license = "MIT"
 
 [dependencies]
 fastnum = "0.7.5"

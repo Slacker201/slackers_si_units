@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "A parser for slackers_si_units"
 repository = "https://github.com/Slacker201/slackers_si_units"
-licence = ["MIT"]
+license = "MIT"
 
 [dependencies]
 fixed = "1.31.0"
