@@ -73,6 +73,8 @@ version = "0.1.0"
 dependencies = [
  "proc-macro2",
  "quote",
+ "si_unit_parser",
+ "si_unit_type",
  "syn 3.0.9",
 ]
 
@@ -87,10 +89,18 @@ dependencies = [
 [[package]]
 name = "si_unit_type"
 version = "0.1.0"
+dependencies = [
+ "si_unit_parser",
+]
 
 [[package]]
 name = "slackers_si_units"
 version = "0.1.0"
+dependencies = [
+ "si_unit_macro",
+ "si_unit_parser",
+ "si_unit_type",
+]
 
 [[package]]
 name = "slk-tokenstream"
@@ -118,6 +128,13 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "test_crate"
+version = "0.1.0"
+dependencies = [
+ "slackers_si_units",
 ]
 
 [[package]]
