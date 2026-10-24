@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-si_unit_parser = { path = "./si_unit_parser" }
-si_unit_type = { path = "./si_unit_type" }
-si_unit_macro = { path = "./si_unit_macro" }
+si_unit_parser = { version = "0.1.0", path = "./si_unit_parser" }
+si_unit_type = { version = "0.1.0", path = "./si_unit_type" }
+si_unit_macro = { version = "0.1.0", path = "./si_unit_macro" }
 
 
 [workspace]

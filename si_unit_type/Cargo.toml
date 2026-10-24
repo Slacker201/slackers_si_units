@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 fastnum = "0.7.5"
 fixed = "1.31.0"
-si_unit_parser = { path = "./../si_unit_parser" }
+si_unit_parser = { version = "0.1.0", path = "./../si_unit_parser" }
 
 
 [features]
