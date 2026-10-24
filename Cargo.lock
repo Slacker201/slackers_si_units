@@ -85,6 +85,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "si_unit_type"
+version = "0.1.0"
+
+[[package]]
 name = "slackers_si_units"
 version = "0.1.0"
 
