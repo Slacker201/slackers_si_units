@@ -2,7 +2,6 @@ use std::{collections::VecDeque, ops::Index};
 
 use slk_tokenstream::TokenStream;
 
-
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash)]
 pub struct FixedPointDecimal {
     integer: VecDeque<Digit>,
@@ -60,10 +59,9 @@ impl FixedPointDecimal {
     pub fn parse(s: impl Into<String>) -> Option<FixedPointDecimal> {
         let backer: Box<[_]> = s.into().chars().collect();
         let mut ts = TokenStream::new(&backer);
-        
 
         let (integer, decimal) = Self::get_parts(&mut ts)?;
-        
+
         let unit = Self::parse_suffix(&mut ts)?;
 
         let mut unscaled = FixedPointDecimal {
@@ -76,28 +74,28 @@ impl FixedPointDecimal {
         Some(unscaled)
     }
 
-    fn get_parts(ts: &mut slk_tokenstream::TokenStream<char>) -> Option<(VecDeque<Digit>, VecDeque<Digit>)> {
-
+    fn get_parts(
+        ts: &mut slk_tokenstream::TokenStream<char>,
+    ) -> Option<(VecDeque<Digit>, VecDeque<Digit>)> {
         let number = Self::parse_float_parts(ts);
 
         let (integer, decimal) = match number {
-            Some((integer, decimal)) => {
-                (integer, decimal)
-            },
+            Some((integer, decimal)) => (integer, decimal),
             None => {
                 let i = Self::parse_int(ts);
                 if i.is_empty() {
                     return None;
                 }
                 (i, VecDeque::new())
-            },
+            }
         };
 
         Some((integer, decimal))
     }
 
-    fn parse_float_parts(ts: &mut slk_tokenstream::TokenStream<char>) -> Option<(VecDeque<Digit>, VecDeque<Digit>)> {
-
+    fn parse_float_parts(
+        ts: &mut slk_tokenstream::TokenStream<char>,
+    ) -> Option<(VecDeque<Digit>, VecDeque<Digit>)> {
         let start = ts.mark();
         let integer = Self::parse_int(ts);
 
@@ -109,9 +107,7 @@ impl FixedPointDecimal {
             return None;
         }
 
-        Some(
-            (integer, decimal)
-        )
+        Some((integer, decimal))
     }
 
     fn parse_int(ts: &mut slk_tokenstream::TokenStream<char>) -> VecDeque<Digit> {
@@ -124,30 +120,38 @@ impl FixedPointDecimal {
         digits
     }
 
-    fn parse_suffix(ts: &mut slk_tokenstream::TokenStream<char>) -> Option<PrefixedUnit>{
+    fn parse_suffix(ts: &mut slk_tokenstream::TokenStream<char>) -> Option<PrefixedUnit> {
         let value = match ts.peek()? {
             'm' => {
                 ts.skip();
                 if let Some(unit) = UnitType::try_from_ts(ts) {
                     ts.skip();
-                    PrefixedUnit { unit: Some(unit), prefix: UnitPrefix::Milli }
+                    PrefixedUnit {
+                        unit: Some(unit),
+                        prefix: UnitPrefix::Milli,
+                    }
                 } else {
-                    PrefixedUnit { unit: Some(UnitType::Meter), prefix: UnitPrefix::None }
+                    PrefixedUnit {
+                        unit: Some(UnitType::Meter),
+                        prefix: UnitPrefix::None,
+                    }
                 }
             }
             _ => {
                 let prefix = UnitPrefix::from_ts(ts);
                 let unit = UnitType::try_from_ts(ts);
 
-                PrefixedUnit { unit, prefix: prefix.unwrap_or(UnitPrefix::None) }
-            },
+                PrefixedUnit {
+                    unit,
+                    prefix: prefix.unwrap_or(UnitPrefix::None),
+                }
+            }
         };
         Some(value)
     }
 
     fn apply_unit_prefix(&mut self, unit_prefix: UnitPrefix) {
         let amount_to_move = unit_prefix.move_amount();
-
 
         if amount_to_move > 0 {
             self.shift_left(amount_to_move as usize);
@@ -160,19 +164,20 @@ impl FixedPointDecimal {
 
     fn shift_left(&mut self, amount: usize) {
         for _ in 0..amount {
-            self.integer.push_back(self.decimal.pop_front().unwrap_or(Digit::Zero));
+            self.integer
+                .push_back(self.decimal.pop_front().unwrap_or(Digit::Zero));
         }
     }
     fn shift_right(&mut self, amount: usize) {
         for _ in 0..amount {
-            self.decimal.push_front(self.integer.pop_back().unwrap_or(Digit::Zero));
+            self.decimal
+                .push_front(self.integer.pop_back().unwrap_or(Digit::Zero));
         }
     }
 
     fn trim_zeros(&mut self) {
         while let Some(_) = self.integer.pop_front_if(|c| *c == Digit::Zero) {}
         while let Some(_) = self.decimal.pop_back_if(|c| *c == Digit::Zero) {}
-
 
         if self.integer.is_empty() {
             self.integer.push_front(Digit::Zero);
@@ -199,7 +204,6 @@ impl FixedPointDecimal {
 }
 
 impl UnitFixedPointDecimal {
-
     pub fn decimal<'a>(&'a self) -> NumberSlice<'a> {
         let (front, back) = self.decimal.as_slices();
         NumberSlice { front, back }
@@ -213,7 +217,6 @@ impl UnitFixedPointDecimal {
     fn apply_unit_prefix(&mut self, unit_prefix: UnitPrefix) {
         let amount_to_move = unit_prefix.move_amount();
 
-
         if amount_to_move > 0 {
             self.shift_left(amount_to_move as usize);
         } else if amount_to_move < 0 {
@@ -225,19 +228,20 @@ impl UnitFixedPointDecimal {
 
     fn shift_left(&mut self, amount: usize) {
         for _ in 0..amount {
-            self.integer.push_back(self.decimal.pop_front().unwrap_or(Digit::Zero));
+            self.integer
+                .push_back(self.decimal.pop_front().unwrap_or(Digit::Zero));
         }
     }
     fn shift_right(&mut self, amount: usize) {
         for _ in 0..amount {
-            self.decimal.push_front(self.integer.pop_back().unwrap_or(Digit::Zero));
+            self.decimal
+                .push_front(self.integer.pop_back().unwrap_or(Digit::Zero));
         }
     }
 
     fn trim_zeros(&mut self) {
         while let Some(_) = self.integer.pop_front_if(|c| *c == Digit::Zero) {}
         while let Some(_) = self.decimal.pop_back_if(|c| *c == Digit::Zero) {}
-
 
         if self.integer.is_empty() {
             self.integer.push_front(Digit::Zero);
@@ -251,7 +255,6 @@ impl UnitFixedPointDecimal {
     pub fn parse_require_unit(s: impl Into<String>) -> Option<UnitFixedPointDecimal> {
         let backer: Box<[_]> = s.into().chars().collect();
         let mut ts = TokenStream::new(&backer);
-        
 
         let (integer, decimal) = FixedPointDecimal::get_parts(&mut ts)?;
 
@@ -272,7 +275,11 @@ impl UnitFixedPointDecimal {
     }
 
     pub const fn new(integer: VecDeque<Digit>, decimal: VecDeque<Digit>, unit: UnitType) -> Self {
-        Self { integer, decimal, unit }
+        Self {
+            integer,
+            decimal,
+            unit,
+        }
     }
 }
 
@@ -315,7 +322,7 @@ impl UnitType {
     fn try_from_ts(ts: &mut TokenStream<char>) -> Option<Self> {
         let v = match ts.peek()? {
             'g' => Self::Gram,
-            'L' => Self::Liter,
+            'l' => Self::Liter,
             's' => Self::Second,
             'm' => Self::Meter,
             _ => return None,
@@ -377,7 +384,6 @@ impl UnitPrefix {
     }
 }
 
-
 pub struct NumberSlice<'a> {
     front: &'a [Digit],
     back: &'a [Digit],
@@ -400,7 +406,6 @@ impl<'a> NumberSlice<'a> {
         self.front.len() + self.back.len()
     }
 }
-
 
 struct PrefixedUnit {
     unit: Option<UnitType>,
