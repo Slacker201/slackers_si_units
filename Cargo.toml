@@ -1,0 +1,11 @@
+[package]
+name = "slackers_si_units"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+
+[workspace]
+resolver = "3"
+members = ["si_unit_parser", "si_unit_macro"]
