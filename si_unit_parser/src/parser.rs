@@ -294,6 +294,21 @@ impl Digit {
         };
         Some(q)
     }
+
+    pub fn to_char(&self) -> char {
+        match self {
+            Digit::Zero => '0',
+            Digit::One => '1',
+            Digit::Two => '2',
+            Digit::Three => '3',
+            Digit::Four => '4',
+            Digit::Five => '5',
+            Digit::Six => '6',
+            Digit::Seven => '7',
+            Digit::Eight => '8',
+            Digit::Nine => '9',
+        }
+    }
 }
 
 impl UnitType {
@@ -380,7 +395,46 @@ impl<'a> Index<usize> for NumberSlice<'a> {
     }
 }
 
+impl<'a> NumberSlice<'a> {
+    fn len(&self) -> usize {
+        self.front.len() + self.back.len()
+    }
+}
+
+
 struct PrefixedUnit {
     unit: Option<UnitType>,
     prefix: UnitPrefix,
+}
+
+pub struct NumberSliceIter<'a> {
+    number_slice: &'a NumberSlice<'a>,
+    idx: usize,
+}
+
+impl<'a> IntoIterator for &'a NumberSlice<'a> {
+    type Item = Digit;
+
+    type IntoIter = NumberSliceIter<'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        NumberSliceIter {
+            number_slice: self,
+            idx: 0,
+        }
+    }
+}
+
+impl<'a> Iterator for NumberSliceIter<'a> {
+    type Item = Digit;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.idx >= self.number_slice.len() {
+            None
+        } else {
+            let v = Some(self.number_slice[self.idx]);
+            self.idx += 1;
+            v
+        }
+    }
 }
