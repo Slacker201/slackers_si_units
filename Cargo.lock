@@ -174,14 +174,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "test_crate"
-version = "0.1.0"
-dependencies = [
- "fixed",
- "slackers_si_units",
-]
-
-[[package]]
 name = "typenum"
 version = "1.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
