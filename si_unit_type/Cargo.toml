@@ -13,5 +13,7 @@ si_unit_parser = { version = "0.1.1", path = "./../si_unit_parser" }
 
 
 [features]
+default = ["f64"]
 f64 = []
 fixed = []
+srde = []

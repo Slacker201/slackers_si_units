@@ -23,10 +23,8 @@ mod backers;
 
 macro_rules! create_unit {
     ($name: ident, $name_but_str: literal) => {
-        #[derive(Clone)]
-        pub struct $name<B: Backer> {
-            backer: B,
-        }
+
+        create_struct!($name);
 
         impl<B: Backer + Debug> Debug for $name<B> {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -132,6 +130,24 @@ macro_rules! create_unit {
             fn cmp(&self, rhs: &Self) -> std::cmp::Ordering {
                 self.backer.cmp(&rhs.backer)
             }
+        }
+    };
+}
+#[cfg(feature = "serde")]
+macro_rules! create_struct {
+    ($name: ident) => {
+        #[derive(Clone, serde::Deserialize, serde::Serialize)]
+        pub struct $name<B: Backer> {
+            backer: B,
+        }
+    };
+}
+#[cfg(not(feature = "serde"))]
+macro_rules! create_struct {
+    ($name: ident) => {
+        #[derive(Clone)]
+        pub struct $name<B: Backer> {
+            backer: B,
         }
     };
 }
