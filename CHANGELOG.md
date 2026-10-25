@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3](https://github.com/Slacker201/slackers_si_units/compare/slackers_si_units-v0.1.2...slackers_si_units-v0.1.3) - 2026-10-25
+
+### Added
+
+- *(serialization)* implement serialization and deserialization for backers that support it
+
+### Fixed
+
+- *(serde)* add serde/derive to serde feature
+
+### Other
+
+- add serde dep
+
 ## [0.1.2](https://github.com/Slacker201/slackers_si_units/compare/slackers_si_units-v0.1.1...slackers_si_units-v0.1.2) - 2026-10-24
 
 ### Other
